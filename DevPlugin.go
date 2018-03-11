@@ -56,16 +56,16 @@ func (_ DevPlugin) willSendRequest(request Jobs) {
 	}
 }
 
-func (_ DevPlugin) afterResponse(response JobResponse, originalResponse JobResponse) JobResponse {
-	results := make(map[string]JobResp)
+func (_ DevPlugin) afterResponse(response HypernovaResponse, originalResponse HypernovaResponse) HypernovaResponse {
+	results := make(map[string]JobResponse)
 	for name, jobResp := range response.Results {
 		if !jobResp.Success {
-			results[name] = JobResp{Html: renderError(name, jobResp.Error)}
+			results[name] = JobResponse{Html: renderError(name, jobResp.Error)}
 		} else {
 			results[name] = jobResp
 		}
 	}
-	return JobResponse{
+	return HypernovaResponse{
 		Success:true,
 		Results:results,
 	}
@@ -75,4 +75,4 @@ func (_ DevPlugin) onError(err error, jobs Jobs) {
 	log.Fatal(err)
 }
 
-func (_ DevPlugin) onSuccess(resp JobResponse, jobs Jobs) {}
+func (_ DevPlugin) onSuccess(resp HypernovaResponse, jobs Jobs) {}
